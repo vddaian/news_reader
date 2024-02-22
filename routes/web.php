@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\NewspaperController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::controller(UserController::class)->group(function () {
+    Route::get('/login', 'login')->name('login.index');
+    Route::post('/login', 'verify')->name('login.verify');
+    Route::get('/register', 'register')->name('register.index');
+    Route::post('/register', 'store')->name('register.store');
+});
+
+Route::controller(NewspaperController::class)->group(function () {
+    Route::get('/newspaper', 'index')->name('newsp.index');
+    Route::post('/newspaper', 'store')->name('newsp.store');
+    Route::put('/newspaper/{id}', 'update')->name('newsp.update');
+    Route::delete('/newspaper/{id}', 'delete')->name('newsp.delete');
+});
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login.index');
 });
