@@ -47,10 +47,20 @@ class NewspaperApiController extends Controller
     {
         $data = [];
         $client = new Client();
-        $crawler = $client->request('GET', 'https://www.elconfidencial.com/');
-        $crawler->filter('article a')->each(function ($node) use (&$data) {
-                $link = $node->attr('href');
-                $data[] = $link;
+        $crawler = $client->request('GET', 'https://www.elpais.com/');
+        $crawler->filter('article')->each(function ($node) use (&$data) {
+            try {
+                $link = $node->filter('a')->attr('href');
+                if ($node->filter('h1')->count() > 0) {
+                    $title = $node->filter('h1')->text();
+                } else if ($node->filter('h2')->count() > 0) {
+                    $title = $node->filter('h2')->text();
+                } else {
+                    $title = $node->filter('h3')->text();
+                }
+                $data[] = [$title => $link];
+            } catch (Exception $error) {
+            }
         });
         // Recoger los titulos de los enlaces recuperados.-
         return response()->json([
