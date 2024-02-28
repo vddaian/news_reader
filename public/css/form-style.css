@@ -33,7 +33,7 @@
     width: fit-content;
     height: fit-content;
     background-color: transparent;
-    font-family: 'Garet-Book';
+    font-family: var(--font);
     border: 2px solid var(--bg-color);
     border-radius: 4px ;
 }

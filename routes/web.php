@@ -20,6 +20,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/login', 'verify')->name('login.verify');
     Route::get('/register', 'register')->name('register.index');
     Route::post('/register', 'store')->name('register.store');
+    Route::get('/logout', 'logout')->name('logout');
 });
 
 Route::controller(NewspaperController::class)->group(function () {

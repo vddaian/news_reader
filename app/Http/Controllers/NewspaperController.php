@@ -13,9 +13,9 @@ class NewspaperController extends Controller
 {
     public function index()
     {
-        $newspaper = new NewspaperApiController();
-        $newspaper = $newspaper->getAll();
-        return view('newspaper.home')->with('newspaper', $newspaper);
+        $newspapers = new NewspaperApiController();
+        $newspapers = $newspapers->getAll();
+        return view('newspaper.home')->with('newspapers', $newspapers->original['data'][0]);
     }
 
     public function show()
@@ -25,7 +25,12 @@ class NewspaperController extends Controller
         return view('newspaper.newspaper')->with('articles', $articles);
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        $api = new NewspaperApiController();
+        $response = $api->new($request);
+        if ($response->original->status) {
+            return redirect()->route('newsp.home');
+        } 
     }
 }

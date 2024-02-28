@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_newspaper', function (Blueprint $table) {
             $table->integer('user_id');
-            $table->integer('newspaper_id');
+            $table->string('newspaper_id');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('newspaper_id')->references('id')->on('newspapers');

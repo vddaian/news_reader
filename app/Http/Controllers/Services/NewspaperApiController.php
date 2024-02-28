@@ -9,6 +9,7 @@ use Goutte\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class NewspaperApiController extends Controller
 {
@@ -16,24 +17,58 @@ class NewspaperApiController extends Controller
     public function getAll()
     {
         try {
-            $id = Auth::id();
-            $data = Newspaper::addSelect(['newsp_id' => DB::table('user_newspaper')->columns('newspaper_id')->whereColumn('newspaper_id', 'newspapers.id')])->get();
-            dd($data);
-            /* return response()->json(
-                $data
-            ); */
-        } catch (Exception $error) {
+            $data = DB::table('user_newspaper')->where('user_id', Auth::id())->get();
+            $newspapers = [];
+            foreach ($data as $value) {
+                $newspaper = Newspaper::where('id', $value->newspaper_id)->get();
+                array_push($newspapers, $newspaper);
+            }
             return response()->json([
-                'data' => $error
+                'data' => $newspapers
             ]);
+        } catch (Exception $error) {
+            echo $error;
+            /* return response()->json([
+                'data' => $error
+            ]); */
         }
     }
 
     public function getById()
     {
     }
-    public function new()
+    public function new($data)
     {
+        if (
+            $data->validate([
+                'title' => 'required',
+                'url' => 'required|url|unique:newspapers'
+            ])
+        ) {
+            try {
+                $id = Str::uuid();
+                Newspaper::create([
+                    'id' => $id,
+                    'title' => $data->title,
+                    'url' => $data->url,
+                ]);
+
+                DB::table('user_newspaper')->insert([
+                    'user_id' => Auth::id(),
+                    'newspaper_id' => $id,
+                ]);
+                return response()->json([
+                    'status' => true,
+                ]);
+            } catch (Exception $error) {
+                return response()->json([
+                    'status' => false,
+                    'data' => $error,
+                ]);
+            }
+
+        }
+
     }
     public function update()
     {

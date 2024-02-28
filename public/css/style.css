@@ -1,13 +1,13 @@
 @font-face {
-    font-family: 'Garet-Book';
+    font-family: 'Cocogoose-Classic';
     font-style: normal;
     font-weight: 400;
-    src: url('/fonts/Garet-Book.ttf');
+    src: url('/fonts/Cocogoose-Classic.ttf');
 }
 :root{
-    --bg-color: rgb(131, 133, 252);
+    --bg-color: rgb(204, 184, 250);
     --bg-page-color:rgb(240, 240, 240);
-    --font:'Garet-Book'
+    --font:'Cocogoose-Classic'
 }
 html, body{
     display: flex;
@@ -17,20 +17,7 @@ html, body{
     height: 100vh;
     margin: 0;
     padding: 0;
-    font-family: 'Garet-Book';
+    font-family: 'Cocogoose-Classic';
     text-align: justify;
     background-color: var(--bg-page-color) ;
-}
-a{
-    color: black;
-    text-decoration: none;
-}
-a:hover{
-    color: white;
-}
-p a {
-    color: var(--bg-color);
-}
-p a:hover{
-    color: rgb(166, 168, 253);
 }

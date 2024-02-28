@@ -1,7 +1,7 @@
 @extends('layouts.home_layout');
 @section('title', 'Home')
 @section('content')
-    @if ($articles)
+    @if (isset($articles))
         <div class="container-xl">
             @foreach ($articles as $title => $link)
                 <h2>{{$title}}</h2>

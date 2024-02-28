@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('newspapers', function (Blueprint $table) {
-            $table->integer('id')->autoIncrement();
+            $table->string('id')->primary();
             $table->string('title');
             $table->string('url');
             $table->timestamps();
