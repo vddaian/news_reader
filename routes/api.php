@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::controller(NewspaperApiController::class)->group(function () {
-    Route::get('/newspaper', 'getContent');
+    Route::get('/newspaper', 'getAll');
     Route::post('/newspaper', 'new');
 });
 

@@ -13,14 +13,16 @@ class NewspaperController extends Controller
 {
     public function index()
     {
-        return view('newspaper.home');
+        $newspaper = new NewspaperApiController();
+        $newspaper = $newspaper->getAll();
+        return view('newspaper.home')->with('newspaper', $newspaper);
     }
 
     public function show()
     {
         $articles = new NewspaperApiController();
         $articles = $articles->getContent();
-        return view('newspaper.home')->with('articles', $articles);
+        return view('newspaper.newspaper')->with('articles', $articles);
     }
 
     public function store()

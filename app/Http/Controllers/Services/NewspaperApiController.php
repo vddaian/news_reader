@@ -17,10 +17,11 @@ class NewspaperApiController extends Controller
     {
         try {
             $id = Auth::id();
-            $data = DB::table('user_newspaper')->where('user_id', $id)->get();
-            return response()->json(
+            $data = Newspaper::addSelect(['newsp_id' => DB::table('user_newspaper')->columns('newspaper_id')->whereColumn('newspaper_id', 'newspapers.id')])->get();
+            dd($data);
+            /* return response()->json(
                 $data
-            );
+            ); */
         } catch (Exception $error) {
             return response()->json([
                 'data' => $error

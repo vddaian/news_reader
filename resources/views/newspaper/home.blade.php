@@ -1,13 +1,17 @@
 @extends('layouts.home_layout');
 @section('title', 'Home')
 @section('content')
-
-    @if ($articles)
-        <div class="container-xl">
-            @foreach ($articles as $title => $link)
-                <h2>{{$title}}</h2>
-                <button type="button" href='{{$link}}'></button>
-            @endforeach
-        </div>
-    @endif
+    <section>
+        <form action="{{route('newsp.store')}}" method='POST'>
+            <div class="form-control">
+                <input type="text" name='url-newspaper'>
+            </div>
+            <button class="btn btn-success"></button>
+        </form>
+    </section>
+    <section>
+        @if($newspaper){
+            
+        }
+    </section>
 @endsection
