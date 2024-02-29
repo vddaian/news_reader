@@ -26,8 +26,8 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(NewspaperController::class)->group(function () {
     Route::get('/newspaper', 'index')->name('newsp.index');
     Route::post('/newspaper', 'store')->name('newsp.store');
-    Route::put('/newspaper/{id}', 'update')->name('newsp.update');
     Route::delete('/newspaper/{id}', 'delete')->name('newsp.delete');
+    Route::get('/newspaper/{id}/articles','show')->name('newsp.show');
 });
 
 Route::get('/', function () {

@@ -13,4 +13,8 @@ class Newspaper extends Model
         'title',
         'url',
     ];
+
+    protected $casts = [
+        'id' => 'string'
+    ];
 }

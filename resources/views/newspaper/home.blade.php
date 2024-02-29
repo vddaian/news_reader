@@ -19,11 +19,16 @@
             @if (isset($newspapers))
                 @foreach ($newspapers as $newspaper)
                     <div class="w-100 mx-2 mt-2 p-3 bg-white d-flex align-items-center justify-content-between rounded">
-                        <h5>{{ $newspaper->title }}</h5>
-                        <form action="">
-                            <button class="btn btn-success">View</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
+                        <h5>{{ $newspaper[0]->title }}</h5>
+                        <div class="d-flex">
+                            <form class="px-1" action="{{ route('newsp.show', $newspaper[0]->id) }}" method="get">
+                                <button class="btn btn-success" type="submit">View</button>
+                            </form>
+                            <form class='px-1' action="">
+                                @method('delete')
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 @endforeach
             @else

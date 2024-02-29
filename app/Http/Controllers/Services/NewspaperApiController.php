@@ -27,15 +27,18 @@ class NewspaperApiController extends Controller
                 'data' => $newspapers
             ]);
         } catch (Exception $error) {
-            echo $error;
-            /* return response()->json([
-                'data' => $error
-            ]); */
+            return response()->json([
+                'data' => $error,
+            ]);
         }
     }
 
-    public function getById()
+    public function getUrlById($id)
     {
+        $url = Newspaper::select('url')->where('id', $id)->get();
+        return response()->json([
+            'data' => $url,
+        ]);
     }
     public function new($data)
     {
@@ -100,7 +103,7 @@ class NewspaperApiController extends Controller
         });
         // Recoger los titulos de los enlaces recuperados.-
         return response()->json([
-            $data
+            'data'=> $data
         ]);
     }
 }
