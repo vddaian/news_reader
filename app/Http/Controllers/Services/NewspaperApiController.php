@@ -42,42 +42,86 @@ class NewspaperApiController extends Controller
     }
     public function new($data)
     {
+
+        if (!str_ends_with($data->url, '/')) {
+            $data->url = $data->url . '/';
+        }
         if (
             $data->validate([
-                'title' => 'required',
-                'url' => 'required|url|unique:newspapers'
+                'url' => 'required|url',
             ])
         ) {
             try {
-                $id = Str::uuid();
-                Newspaper::create([
-                    'id' => $id,
-                    'title' => $data->title,
-                    'url' => $data->url,
-                ]);
+                $newspaper = Newspaper::where('url', $data->url)->get();
+                if (count($newspaper) != 0) {
+                    $userNews = DB::table('user_newspaper')->where('user_id', Auth::id())->where('newspaper_id', $newspaper[0]->id)->get();
+                    if (!count($userNews)) {
+                        DB::table('user_newspaper')->insert([
+                            'user_id' => Auth::id(),
+                            'newspaper_id' => $newspaper[0]->id,
+                        ]);
+                        return response()->json([
+                            'status' => true,
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => false,
+                        ]);
+                    }
+                } else {
+                    $title = $this->getTitle($data->url);
+                    $id = Str::uuid();
+                    Newspaper::create([
+                        'id' => $id,
+                        'title' => $title,
+                        'url' => $data->url,
+                    ]);
 
-                DB::table('user_newspaper')->insert([
-                    'user_id' => Auth::id(),
-                    'newspaper_id' => $id,
-                ]);
-                return response()->json([
-                    'status' => true,
-                ]);
+                    DB::table('user_newspaper')->insert([
+                        'user_id' => Auth::id(),
+                        'newspaper_id' => $id,
+                    ]);
+                    return response()->json([
+                        'status' => true,
+                    ]);
+                }
+
             } catch (Exception $error) {
+                echo $error;
                 return response()->json([
                     'status' => false,
                     'data' => $error,
                 ]);
             }
-
+        }
+    }
+    /* public function update($request)
+    {
+        $url = $request->url;
+        $id = $request->id;
+        Newspaper::where('id', $id)->update(['url' => $url]);
+        return response()->json([
+            'status' => true,
+        ]);
+    } */
+    public function delete($id)
+    {
+        try {
+            DB::table('user_newspaper')->where('user_id', Auth::id())->where('newspaper_id', $id)->delete();
+            $newspapers = DB::table('user_newspaper')->where('newspaper_id', $id)->get();
+            if (count($newspapers) == 0) {
+                Newspaper::where('id', $id)->delete();
+            }
+            return response()->json([
+                'status' => true,
+            ]);
+        } catch (Exception $error) {
+            return response()->json([
+                'status' => true,
+                'error' => $error,
+            ]);
         }
 
-    }
-    public function update()
-    {
-    }
-    public function delete()
-    {
     }
 
     /* Funciones que devuelven diferentes contenidos del periodico */
@@ -99,11 +143,23 @@ class NewspaperApiController extends Controller
                 }
                 $data[] = [$title => $link];
             } catch (Exception $error) {
+                return response()->json([
+                    'status' => true,
+                    'error' => $error,
+                ]);
             }
         });
-        // Recoger los titulos de los enlaces recuperados.-
         return response()->json([
-            'data'=> $data
+            'data' => $data
         ]);
+    }
+
+    public function getTitle($url)
+    {
+        $data = [];
+        $client = new Client();
+        $crawler = $client->request('GET', $url);
+        $title = $crawler->filter('title')->text();
+        return $title;
     }
 }
