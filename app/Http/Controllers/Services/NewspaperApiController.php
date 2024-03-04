@@ -82,11 +82,11 @@ class NewspaperApiController extends Controller
 
     /* Funciones que devuelven diferentes contenidos del periodico */
 
-    public function getContent()
+    public function getContent($url)
     {
         $data = [];
         $client = new Client();
-        $crawler = $client->request('GET', 'https://www.elpais.com/');
+        $crawler = $client->request('GET', $url);
         $crawler->filter('article')->each(function ($node) use (&$data) {
             try {
                 $link = $node->filter('a')->attr('href');

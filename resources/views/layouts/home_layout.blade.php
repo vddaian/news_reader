@@ -13,7 +13,7 @@
     @stack('css')
 </head>
 
-<body>
+<body class="h-100">
     <nav class="navbar navbar-expand-lg w-100 d-flex justify-content-end pe-3">
         <a href="{{ route('newsp.index') }}"><img src="{{ asset('media\ico\home_circle_icon_137496.png') }}"
                 alt="home_ico" style="width:35px; height:35px;"></a></li>

@@ -13,10 +13,18 @@ class NewspaperController extends Controller
 {
     public function index()
     {
-        $newspapers = new NewspaperApiController();
-        $newspapers = $newspapers->getAll();
+        $api = new NewspaperApiController();
+        $newspapers = $api->getAll();
         $newspapers = isset($newspapers->original['data'])?$newspapers->original['data']:null;
-        return view('newspaper.home')->with('newspapers', $newspapers);
+        $articles = [];
+        foreach ($newspapers as $newspaper) {
+            array_push($articles, $api->getContent($newspaper[0]->url));
+        }
+        $data = [
+            'newspapers' => $newspapers,
+            'articles' => $articles,
+        ];
+        return view('newspaper.home')->with('data', $data);
     }
 
     public function show($id)
@@ -32,7 +40,7 @@ class NewspaperController extends Controller
         $api = new NewspaperApiController();
         $response = $api->new($request);
         if ($response->original['status']) {
-            return redirect()->route('newsp.home');
+            return redirect()->route('newsp.index');
         } 
     }
 }
