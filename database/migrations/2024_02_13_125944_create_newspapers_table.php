@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('newspapers', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('title');
+            $table->string('feed');
             $table->string('url');
             $table->timestamps();
         });

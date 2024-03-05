@@ -10,6 +10,10 @@
                         <input class='form-control' type="text" name='url'>
                         @csrf
                     </div>
+                    <div class="form-group my-2">
+                        <label for="url" class="my-2">Feed URL:</label>
+                        <input class='form-control' type="text" name='feed'>
+                    </div>
                     <button type="submit" class="btn btn-success">Add</button>
             </form>
         </section>

@@ -1,33 +1,55 @@
 @extends('layouts.home_layout')
 @section('title', 'Home')
 @section('content')
-    @if (isset($data['url']))
-{{--         <section class="col-6 my-3">
-            <form action="{{ route('newsp.update', $data['newspaper']) }}" class="form-inline w-50" method="POST">
-                <h4 class="text-decoration-underline">Update Newspaper</h2>
-                    <div class="form-group my-2 d-flex justify-content-center">
-                        <input type="text" class="form-control" name="url" id="url"
-                            value="{{ $data['url']->original['data'][0]['url'] }}">
-                        @method('put');
-                        @csrf
-                        <input type="hidden" name="id" value {{ $data['newspaper'] }}>
-                        <button type="submit" class="btn btn-warning mx-2">Update</button>
+    <section class="container-xxl h-75 my-4 rounded d-flex">
+
+        <div class="w-75 d-flex">
+            @if (isset($data['valid_articles']))
+                <div class="w-50">
+                    <h3 class="m-2">Articulos validos</h3>
+                    <div class="h-100 m-2 overflow-auto border bg-light rounded">
+                        @foreach ($data['valid_articles'] as $key => $article)
+                            @foreach ($article as $title => $link)
+                                <div class="d-flex justify-content-between align-items-center m-2 p-2 rounded bg-white">
+                                    <h5 class="w-75 overflow-hidden">{{ $title }}</h5>
+                                    <a href="{{ $link }}">
+                                        <button type="button" class="btn btn-success">View</button>
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endforeach
                     </div>
-            </form>
-        </section> --}}
-    @endif
-    @if (isset($data['articles']))
-        <section class="container-xl h-75 bg-light my-4 overflow-auto rounded">
-            @foreach ($data['articles']->original['data'] as $key => $article)
-                @foreach ($article as $title => $link)
-                    <div class="d-flex justify-content-between align-items-center m-2 p-2 rounded bg-white">
-                        <h5 class="w-75 overflow-hidden">{{ $title }}</h5>
-                        <a href="{{ $link }}">
-                            <button type="button" class="btn btn-success">View</button>
-                        </a>
+                </div>
+            @endif
+            @if (isset($data['invalid_articles']))
+                <div class="w-50">
+                    <h3 class="m-2">Articulos no validos</h3>
+                    <div class="h-100 m-2 overflow-auto border bg-light rounded">
+                        @foreach ($data['invalid_articles'] as $key => $article)
+                            @foreach ($article as $title => $link)
+                                <div class="d-flex justify-content-between align-items-center m-2 p-2 rounded bg-white">
+                                    <h5 class="w-75 overflow-hidden">{{ $title }}</h5>
+                                    <a href="{{ $link }}">
+                                        <button type="button" class="btn btn-success">View</button>
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endforeach
                     </div>
-                @endforeach
-            @endforeach
-        </section>
-    @endif
+                </div>
+            @endif
+        </div>
+        @if (isset($data['range']))
+            <div class="w-25 d-flex flex-column justify-content-center align-items-center">
+                <h3>Precisión</h3>
+                <div class=" p-3 bg-light rounded border">
+                    <p style="font-size:40px;">{{ $data['range'] }}%</p>
+                </div>
+                
+            </div>
+        @endif
+    </section>
+
+
+
 @endsection

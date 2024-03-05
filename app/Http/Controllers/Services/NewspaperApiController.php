@@ -40,15 +40,26 @@ class NewspaperApiController extends Controller
             'data' => $url,
         ]);
     }
+
+    public function getRssUrlById($id)
+    {
+        $url = Newspaper::select('feed')->where('id', $id)->get();
+        return response()->json([
+            'data' => $url,
+        ]);
+    }
     public function new($data)
     {
-
         if (!str_ends_with($data->url, '/')) {
             $data->url = $data->url . '/';
+        }
+        if (!str_ends_with($data->feed, '/')) {
+            $data->feed = $data->feed . '/';
         }
         if (
             $data->validate([
                 'url' => 'required|url',
+                'feed'=> 'required|url',
             ])
         ) {
             try {
@@ -74,6 +85,7 @@ class NewspaperApiController extends Controller
                     Newspaper::create([
                         'id' => $id,
                         'title' => $title,
+                        'feed' => $data->feed,
                         'url' => $data->url,
                     ]);
 
@@ -104,6 +116,7 @@ class NewspaperApiController extends Controller
             'status' => true,
         ]);
     } */
+
     public function delete($id)
     {
         try {
@@ -142,12 +155,26 @@ class NewspaperApiController extends Controller
                     $title = $node->filter('h3')->text();
                 }
                 $data[] = [$title => $link];
+                
             } catch (Exception $error) {
                 return response()->json([
-                    'status' => true,
+                    'status' => false,
                     'error' => $error,
                 ]);
             }
+        });
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+    public function getRssContent($feed)
+    {
+        $data = [];
+        $client = new Client();
+        $crawler = $client->request('GET', $feed);
+        $crawler->filter('item')->each(function ($node) use (&$data) {
+            $title = $node->filter('title')->text();
+            $data[] = $title;
         });
         return response()->json([
             'data' => $data

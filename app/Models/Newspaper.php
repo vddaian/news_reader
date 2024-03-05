@@ -11,6 +11,7 @@ class Newspaper extends Model
     protected $fillable = [
         'id',
         'title',
+        'feed',
         'url',
     ];
 
